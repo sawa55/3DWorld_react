@@ -1,0 +1,3 @@
+  const { isActive, setIsActive, isHovered, setIsHovered, hoveredId, setHoveredId } = useActive();
+
+  isActiveはクリックした後のマウスの移動を感知して、少なければtrue,逆はfalse
