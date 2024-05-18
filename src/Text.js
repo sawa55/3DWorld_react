@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useActive } from './ActiveContext';
+import React, { useEffect, useState } from 'react';
+import { useGlobalId } from './ActiveContext';
 
 const Text = () => {
-    const { globalId } = useActive();
+    console.log('Text rendered')
+    const { globalId, setGlobalId, } = useGlobalId();
     const [showText, setShowText] = useState(false);
 
     useEffect(() => {
@@ -33,14 +34,29 @@ const Text = () => {
         }
     };
 
+    const handleSwitchId = () => {
+        if (globalId === 'a') {
+            setGlobalId('b');
+        } else if (globalId === 'b') {
+            setGlobalId('a');
+        }
+    };
+
+    const handleButtonClick = () => {
+        setGlobalId(null);  // globalIdをnullに設定
+    };
+
     return (
         <div className={`text ${showText ? 'visible' : 'hidden'}`}
             onClick={handleEvent}
 
         >
             {getTextContent(globalId)}
+            <button onClick={handleButtonClick}>Reset Global ID</button>
+            <p>Current Global ID: {globalId}</p>
+            <button onClick={handleSwitchId}>Switch ID</button>
         </div>
     );
 };
 
-export default Text;
+export default React.memo(Text);

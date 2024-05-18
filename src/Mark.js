@@ -7,11 +7,12 @@ import { SetupOrbitControls } from './OrbitControls';
 import { useActive } from './ActiveContext';
 
 function HighlightMarker({ gltf }) {
+    console.log('HighlightMarker rendered');
     const [markerPosition, setMarkerPosition] = useState([0, 0, 0]);
     const [visible, setVisible] = useState(false);
     const { raycaster, pointer, camera, gl, scene } = useThree();
     const controls = useRef();
-    const { isActive, setIsActive, isHovered, isAnimating } = useActive();
+    const { isActive, isHovered, isAnimating } = useActive();
 
 
     useEffect(() => {
@@ -56,6 +57,7 @@ function HighlightMarker({ gltf }) {
     });
 
     const handleMarkerClick = () => {
+        console.log(isActive)
         if (visible && isActive && !isHovered && !isAnimating) {
             const targetPosition = new THREE.Vector3(...markerPosition);
             const startQuaternion = camera.quaternion.clone();

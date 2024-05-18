@@ -7,20 +7,21 @@ import {
 } from "@react-three/drei";
 import * as THREE from "three";
 import React, { useRef, useState, useEffect } from "react";
-import { easing } from "maath";
 import { useFrame } from "@react-three/fiber";
-import { useActive } from './ActiveContext';
+import { useActive, useGlobalId } from './ActiveContext';
 import * as TWEEN from '@tweenjs/tween.js';
 
 const Scene = ({ position, model, id }) => {
+  console.log('Scene rendered');
   const [Card_active, setActive] = useState(false);
   const meshPortalMaterialRef = useRef();
   const [localHovered, setLocalHovered] = useState(false); // ローカルの hovered 状態を保持
-  const { isActive, setIsActive, isHovered,
-    setIsHovered, hoveredId, setHoveredId,
+  const { isActive,
+    setIsHovered,
     isAnimating, setIsAnimating,
-    globalId, setGlobalId
+
   } = useActive();
+  const { globalId, setGlobalId } = useGlobalId();
   const blendTweenRef = useRef(null);
   const blendTargetRef = useRef(0);
 
@@ -64,10 +65,10 @@ const Scene = ({ position, model, id }) => {
   }
 
   const handlePointerOver = (event) => {
-    if (hoveredId === null) {
-      setIsHovered(true);
-      setLocalHovered(true);
-    }
+
+    setIsHovered(true);
+    setLocalHovered(true);
+
     event.stopPropagation(); // 他のオブジェクトへのイベント伝播を停止
   };
 
@@ -77,6 +78,18 @@ const Scene = ({ position, model, id }) => {
     setLocalHovered(false);
 
   };
+
+  useEffect(() => {
+    if (globalId === null) {
+      setActive(false);  // globalIdがnullの場合、Card_activeをfalseに設定
+    } else if (globalId === id) {
+      setActive(true);
+    } else if (globalId !== id) {
+      setActive(false);
+    }
+  }, [globalId]);
+
+
 
 
   return (

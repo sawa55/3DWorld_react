@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';  // 'client' をインポート
 import App from './App';  // App コンポーネントをインポート
 import './App.css';  // グローバルスタイルをインポート
-import { ActiveProvider } from './ActiveContext';
+import { ActiveProvider, GlobalIdProvider } from './ActiveContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 // createRoot を使用して root を作成
@@ -11,7 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ActiveProvider>
-      <App />
+      <GlobalIdProvider>
+        <App />
+      </GlobalIdProvider>
     </ActiveProvider>
   </React.StrictMode>
 );

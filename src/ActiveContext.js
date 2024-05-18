@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
 
 const ActiveContext = createContext();
 
@@ -6,27 +6,26 @@ export const useActive = () => useContext(ActiveContext);
 
 export const ActiveProvider = ({ children }) => {
     const [isActive, setIsActive] = useState(false);
-    const [moveCount, setMoveCount] = useState(0);
-    const [isHovered, setIsHovered] = useState(false);  // isHovered 状態を追加
-    const [hoveredId, setHoveredId] = useState(null);
-    const [globalId, setGlobalId] = useState(null);
-    const [isAnimating, setIsAnimating] = useState(false);
+    const moveCount = useRef(0);
+    const [isHovered, setIsHovered] = useState(false);
 
-    const [doubleClickHandler, setDoubleClickHandler] = useState(null);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
         const handleMouseDown = () => {
             setIsActive(true);
-            setMoveCount(0);
+            moveCount.current = 0;
         };
 
         const handleMouseMove = () => {
-            setMoveCount(prevCount => prevCount + 1);
+            moveCount.current += 1;
+            if (moveCount.current >= 6) {
+                setIsActive(false);
+            }
         };
 
         const handleMouseUp = () => {
             setIsActive(false);
-            setMoveCount(0);
         };
 
         document.addEventListener('mousedown', handleMouseDown);
@@ -40,27 +39,32 @@ export const ActiveProvider = ({ children }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (moveCount >= 6) {
-            setIsActive(false);
-        }
-    }, [moveCount]);
-
     return (
         <ActiveContext.Provider value={{
             isActive,
             setIsActive,
             isHovered,
             setIsHovered,
-            hoveredId,
-            setHoveredId,
+
             isAnimating,
             setIsAnimating,
-            globalId,
-            setGlobalId,
 
         }}>
             {children}
         </ActiveContext.Provider>
+    );
+};
+
+const GlobalIdContext = createContext();
+
+export const useGlobalId = () => useContext(GlobalIdContext);
+
+export const GlobalIdProvider = ({ children }) => {
+    const [globalId, setGlobalId] = useState(null);
+
+    return (
+        <GlobalIdContext.Provider value={{ globalId, setGlobalId }}>
+            {children}
+        </GlobalIdContext.Provider>
     );
 };

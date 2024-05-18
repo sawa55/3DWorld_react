@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 function Loader({ setGltf, setCardGltf, setCardGltf_a }) {
+    console.log('Loader rendered');
     useEffect(() => {
         const loader = new GLTFLoader();
 
