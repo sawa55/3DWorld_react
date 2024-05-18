@@ -21,7 +21,8 @@ function Loader({ setGltf, setCardGltf, setCardGltf_a }) {
         });
 
 
-    }, [setGltf, setCardGltf]);  // 依存配列に setCardGltf を追加
+
+    }, [setGltf]);  // 依存配列に setCardGltf を追加
 
     return null;
 }

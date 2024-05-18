@@ -107,7 +107,6 @@ const Scene = ({ position, model, id }) => {
           onPointerOut={handlePointerOut}
         >
           <MeshPortalMaterial ref={meshPortalMaterialRef}>
-            {/* groupの動を打ち消すために逆のpositionを設定 */}
             <primitive object={model.scene} scale={1} position={[...inversePosition, 0.6]} />
 
             <mesh>

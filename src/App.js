@@ -28,7 +28,7 @@ function App() {
                             <primitive object={gltf.scene} />
                             <HighlightMarker gltf={gltf} />
                             <Scene position={[0.2, 0, -0.5]} model={cardGltf} id={"a"} />
-                            <Scene position={[-0.4, 0, -0.7]} model={cardGltf_a} id={"b"} />
+                            {/* <Scene position={[-0.4, 0, -0.7]} model={cardGltf_a} id={"b"} /> */}
                         </>
                     )}
                     {/* <Keyboard /> */}
