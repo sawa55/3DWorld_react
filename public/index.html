@@ -7,7 +7,21 @@
 </head>
 
 <body>
+  <video id="video" loop crossOrigin="anonymous" playsinline style="display:none" muted>
+    <source src="./Texture/video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+  </video>
   <div id="root"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const video = document.getElementById('video');
+      video.oncanplay = function () {
+        console.log('ビデオが読み込まれ、再生準備が整いました。');
+      };
+      video.onerror = function () {
+        console.error('ビデオの読み込みに失敗しました。');
+      };
+    });
+  </script>
 
   <script>
     let isProcessing = true;
