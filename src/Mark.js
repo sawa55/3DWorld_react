@@ -34,7 +34,7 @@ function HighlightMarker({ gltf }) {
             if (gltf && !isHovered) {
                 raycaster.setFromCamera(pointer, camera);
                 const intersects = raycaster.intersectObjects(gltf.scene.children, true);
-                const boxIntersect = intersects.find(intersect => intersect.object.name === "Cube");
+                const boxIntersect = intersects.find(intersect => intersect.object.name === "Floor");
                 if (boxIntersect) {
                     const position = boxIntersect.point.clone();
                     position.y += 0.01;

@@ -1,37 +1,35 @@
-import React, { useState, useRef } from 'react';
-import { Canvas, } from '@react-three/fiber';
+import React, { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
 import Loader from "./Loader";
 import HighlightMarker from "./Mark";
-import Scene from "./Scene";
+import Portal from "./Portal";
 import Text from "./Text";
-import Keyboard from './keyboard';
-
-
+import ShowModel from "./ShowModel";
 
 function App() {
     const [gltf, setGltf] = useState(null);
     const [cardGltf, setCardGltf] = useState(null);
     const [cardGltf_a, setCardGltf_a] = useState(null);
-
-    console.log('App rendered');
-
-
+    const [isLoaded, setIsLoaded] = useState(false);
 
     return (
         <div className="app-container">
             <Text />
             <div id="canvas">
                 <Canvas camera={{ position: [0, 0.3, 0], fov: 75 }}>
-                    <Loader setGltf={setGltf} setCardGltf={setCardGltf} setCardGltf_a={setCardGltf_a} />
-                    {gltf && cardGltf && (
+                    <Loader setGltf={setGltf} setCardGltf={setCardGltf} setCardGltf_a={setCardGltf_a} onLoaded={setIsLoaded} />
+                    {isLoaded && (
                         <>
-                            <primitive object={gltf.scene} />
+                            <ShowModel
+                                gltf={gltf}
+                                cardGltf={cardGltf}
+                                cardGltf_a={cardGltf_a}
+                            />
                             <HighlightMarker gltf={gltf} />
-                            <Scene position={[0.2, 0, -0.5]} model={cardGltf} id={"a"} />
-                            {/* <Scene position={[-0.4, 0, -0.7]} model={cardGltf_a} id={"b"} /> */}
+                            <Portal position={[0.2, 0, -0.5]} model={cardGltf} id={"a"} />
+                            <Portal position={[-0.4, 0, -0.8]} model={cardGltf_a} id={"b"} />
                         </>
                     )}
-                    {/* <Keyboard /> */}
                 </Canvas>
             </div>
         </div>
