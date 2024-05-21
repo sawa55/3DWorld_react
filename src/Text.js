@@ -25,10 +25,42 @@ const Text = () => {
     const getTextContent = (id) => {
         switch (id) {
             case 'a':
-                return 'これはDNAのIDに対するテキストです。';
-            case 'b':
-                return 'これは地球のIDに対するテキストです。';
+                return `使用可能言語
+    HTML,CSS
+    JavaScript
+    React.js
+    Three.js
+    Node.js
+    
+バージョン管理ツール
+    Git, GitHub
+    Backlog`;
 
+            case 'b':
+                return `使用ソフト
+
+  映像ツール
+
+    Blender
+    Unreal Engine
+    Davinci Resolve
+    
+  デザインツール
+
+    Canva
+    Figma`;
+
+            default:
+                return 'IDが選択されていません。';
+        }
+    };
+
+    const getTextContent2 = (id) => {
+        switch (id) {
+            case 'a':
+                return '3DCGについて';
+            case 'b':
+                return 'プログラミングについて';
             default:
                 return 'IDが選択されていません。';
         }
@@ -51,10 +83,10 @@ const Text = () => {
             onClick={handleEvent}
 
         >
-            {getTextContent(globalId)}
-            <button onClick={handleButtonClick}>Reset Global ID</button>
-            <p>Current Global ID: {globalId}</p>
-            <button onClick={handleSwitchId}>Switch ID</button>
+            <pre>{getTextContent(globalId)}</pre>
+            <button className='reset' onClick={handleButtonClick}>×</button>
+            {/* <p>Current Global ID: {globalId}</p> */}
+            <button onClick={handleSwitchId}>{getTextContent2(globalId)}</button>
         </div>
     );
 };

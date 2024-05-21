@@ -16,7 +16,7 @@ function App() {
         <div className="app-container">
             <Text />
             <div id="canvas">
-                <Canvas camera={{ position: [0, 0.3, 0], fov: 75 }}>
+                <Canvas camera={{ position: [0, 0.3, -1], fov: 75, rotation: [0, Math.PI / 2, 0] }}>
                     <Loader setGltf={setGltf} setCardGltf={setCardGltf} setCardGltf_a={setCardGltf_a} onLoaded={setIsLoaded} />
                     {isLoaded && (
                         <>
@@ -26,8 +26,8 @@ function App() {
                                 cardGltf_a={cardGltf_a}
                             />
                             <HighlightMarker gltf={gltf} />
-                            <Portal position={[0.2, 0, -0.5]} model={cardGltf} id={"a"} />
-                            <Portal position={[-0.4, 0, -0.8]} model={cardGltf_a} id={"b"} />
+                            <Portal position={[1, 0.2, -0.2]} model={cardGltf} id={"a"} />
+                            <Portal position={[-1, 0.2, -0.2]} model={cardGltf_a} id={"b"} />
                         </>
                     )}
                 </Canvas>

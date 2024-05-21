@@ -2,17 +2,20 @@ import {
 
   RoundedBox,
 
-  Tetrahedron
+  Tetrahedron,
+  Edges,
+  Text3D,
 } from "@react-three/drei";
 import * as THREE from "three";
 import React, { useRef, useState, useEffect } from "react";
-
+import { useFrame, useThree } from "@react-three/fiber"
 import { useActive, useGlobalId } from './ActiveContext';
 
 
-const portalMaterialImpl = ({ position, model, id }) => {
+const PortalMaterialImpl = ({ position, model, id }) => {
   console.log('portalMaterialImpl rendered');
   const [Card_active, setActive] = useState(false);
+  const tetraRef = useRef();
 
   const [localHovered, setLocalHovered] = useState(false); // ローカルの hovered 状態を保持
   const { isActive,
@@ -21,6 +24,29 @@ const portalMaterialImpl = ({ position, model, id }) => {
 
   } = useActive();
   const { globalId, setGlobalId } = useGlobalId();
+
+  useFrame((state, delta) => {
+    if (tetraRef.current) {
+      tetraRef.current.rotation.y += Math.PI * delta; // 1秒間にπラジアン（半回転）を追加
+    }
+  });
+
+  const textRef = useRef();
+  const initialPosition = { x: 0, y: 0, z: 0 }; // テキストの初期位置
+  const maxOffset = 0.25; // X軸に沿った最大の動き
+
+  const { camera } = useThree();  // カメラオブジェクトを取得
+
+  useFrame(() => {
+    if (textRef.current) {
+      const distance = camera.position.x - position[0]; // カメラとテキストのX座標の差
+      const offset = Math.sign(distance) * Math.min(maxOffset, Math.abs(distance * .8)); // オフセットを計算し、上限を設ける // オフセットを計算し、上限を設ける
+      textRef.current.position.x = initialPosition.x + offset; // 新しいX座標を設定
+      textRef.current.geometry.center(); // テキストがカメラの位置を向くように設定
+      textRef.current.lookAt(camera.position);
+
+    }
+  });
 
 
 
@@ -72,22 +98,47 @@ const portalMaterialImpl = ({ position, model, id }) => {
   return (
     <>
       <group position={position}>
-        <Tetrahedron args={localHovered ? [0.12, 0] : [0.1, 0]} position={[0, 0.4, 0]}>
-          <meshBasicMaterial color="royalblue" />
+        <Tetrahedron
+          ref={tetraRef}
+          args={localHovered ? [0.2, 0] : [0.1, 0]}
+          position={localHovered ? [0, 0.6, 0] : [0, 0.4, 0]}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+        >
+          <meshBasicMaterial color={localHovered ? "red" : "royalblue"} />
         </Tetrahedron>
 
-        <RoundedBox
-          args={[0.6, 0.6, 0.01]}
-          radius={0.01}
+        <mesh
+          // args={[0.6, 0.6, 0.01]}
+          // radius={0.01}
           onClick={doubleClickHandler}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
+          <boxGeometry
+            args={[1, 0.4, 0.01]}
+            radius={0.01}
+          />
+          <meshBasicMaterial color="#00FFFF" />
+          <Edges scale={1.1} color={localHovered ? "yellow" : "black"} />
+        </mesh>
+        <Text3D
+          ref={textRef}
+          font="./Fonts/Roboto Black_Regular.json" // Three.js JSONフォントファイルのパス
+          size={0.1} // フォントサイズ
+          position={[0, 0, -0.16]}
+          rotation={[0, Math.PI, 0]}
+          height={0.1} // テキストの厚み
+          curveSegments={12} // 曲線のセグメント数
+          material={new THREE.MeshBasicMaterial({ color: '#FF7F50' })}
 
-        </RoundedBox>
+
+        >
+          Click
+        </Text3D>
       </group>
     </>
   );
 };
 
-export default portalMaterialImpl;
+export default PortalMaterialImpl;

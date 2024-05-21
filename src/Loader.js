@@ -19,8 +19,32 @@ function Loader({ setGltf, setCardGltf, setCardGltf_a, onLoaded }) {
             checkAllLoaded();
         });
 
-        loader.load('./Model/Light_bake_test.glb', (cardGltf) => {
+        loader.load('./Model/Light_bake_Laptop.glb', (cardGltf) => {
             setCardGltf(cardGltf);
+            const video2 = document.getElementById('video2');
+            video2.play();
+            const texture = new THREE.VideoTexture(video2);
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            texture.format = THREE.RGBFormat;
+            texture.wrapS = THREE.RepeatWrapping;  // テクスチャのラッピングを設定
+            texture.repeat.x = -1;  // テクスチャを水平に反転
+
+            const Display = cardGltf.scene.children.find(child => child.name === 'Display');
+            console.log(Display);
+            if (Display) {
+                // MeshBasicMaterialを使用してマテリアルを作成
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    side: THREE.DoubleSide,
+                    transparent: true,  // 必要に応じて透明度を設定
+                    opacity: 0.9        // 透明度の値
+                });
+                Display.material = material;
+                Display.material.needsUpdate = true;
+
+                // Planeの上下を反転
+            }
             checkAllLoaded();
         });
 

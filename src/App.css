@@ -23,15 +23,21 @@ html,
 }
 
 .text {
-    background-color: gray;
+    background-color: rgba(256, 256, 256, 0.8);
     padding: 10px;
-    margin-right: 20px;
+    height: 100%;
+    width: 20%;
+    margin-right: 0px;
     position: fixed;
     right: -100%;
     /* 初期位置を画面外に設定 */
     transition: right 0.5s ease;
     pointer-events: auto;
     z-index: 1;
+    font-size: 25px;
+
+
+
 }
 
 .text.visible {
@@ -42,4 +48,40 @@ html,
 .text.hidden {
     right: -100%;
     /* 非表示状態のときは画面外へ */
+}
+
+.reset {
+    position: absolute;
+    left: -50px;
+    top: 10px;
+    width: 45px;
+    /* ボタンの幅 */
+    height: 45px;
+
+    /* ボタンの高さ */
+    background-color: rgba(256, 256, 256, 0.8);
+    /* 背景色 */
+    color: black;
+    /* テキスト色 */
+    font-size: 40px;
+    /* フォントサイズ */
+    line-height: 30px;
+    /* ラインの高さ */
+    text-align: center;
+    /* テキストを中央揃え */
+    cursor: pointer;
+    /* カーソルをポインターに */
+    border: none;
+    /* 枠線なし */
+    outline: none;
+    /* アウトラインなし */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* トランジションを追加 */
+}
+
+.reset:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* ホバー時の背景色を暗くする */
+    color: white;
+    /* ホバー時のテキスト色を白にする */
 }
