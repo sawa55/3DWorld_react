@@ -6,12 +6,15 @@ html,
     width: 100%;
     height: 100%;
     overflow: hidden;
+
 }
 
 .app-container {
     display: flex;
     width: 100%;
     height: 100%;
+    /* overflow: hidden; */
+
 }
 
 #canvas {
@@ -20,46 +23,65 @@ html,
     height: 100%;
     pointer-events: none;
     touch-action: none;
+    position: fixed;
+
 }
 
+
 .text {
-    background-color: rgba(256, 256, 256, 0.8);
-    padding: 10px;
-    height: 100%;
-    width: 20%;
-    margin-right: 0px;
-    position: fixed;
-    right: -100%;
-    /* 初期位置を画面外に設定 */
+    background-color: rgba(256, 256, 256, 0.9);
+
+
+    height: 50%;
+    width: 100%;
+    margin: 0px;
+    position: absolute;
+    top: 100%;
+    /* display: flex;
+    justify-content: center; */
+
     transition: right 0.5s ease;
     pointer-events: auto;
     z-index: 1;
     font-size: 25px;
-
-
+    overflow: scroll;
+    transition: top 0.5s ease-in-out,
+        background-color 1s ease-in-out;
 
 }
 
 .text.visible {
-    right: 0;
-    /* 可視状態のときは右端から表示 */
+    top: 50%;
+
+
 }
 
 .text.hidden {
-    right: -100%;
-    /* 非表示状態のときは画面外へ */
+    top: 100%;
+
+
 }
 
+.text_container {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 45px;
+    /* max-width: 50%; */
+}
+
+
+
 .reset {
-    position: absolute;
-    left: -50px;
-    top: 10px;
+    position: fixed;
+    /* left: -20px; */
+    top: 44%;
+    left: 0;
     width: 45px;
     /* ボタンの幅 */
     height: 45px;
 
     /* ボタンの高さ */
-    background-color: rgba(256, 256, 256, 0.8);
+    background-color: rgba(240, 220, 200, 0.8);
     /* 背景色 */
     color: black;
     /* テキスト色 */
@@ -75,8 +97,20 @@ html,
     /* 枠線なし */
     outline: none;
     /* アウトラインなし */
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, opacity 0.5s ease;
     /* トランジションを追加 */
+}
+
+.text.hidden .reset {
+    display: block;
+    /* displayをnoneからblockに変更 */
+    opacity: 0;
+    /* 隠れている間は不透明度を0に */
+}
+
+.text.visible .reset {
+    opacity: 1;
+    /* .textが.hiddenでないとき、不透明度を1に */
 }
 
 .reset:hover {
@@ -84,4 +118,36 @@ html,
     /* ホバー時の背景色を暗くする */
     color: white;
     /* ホバー時のテキスト色を白にする */
+}
+
+.main_header {
+    font-size: 25px;
+    /* padding-bottom: 5px; */
+    line-height: 0.3;
+}
+
+.header {
+    font-size: 20px;
+    line-height: 0.3;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+.content {
+    position: relative;
+    font-size: 15px;
+    /* margin-left: 50%; */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* margin-right: 20%; */
+}
+
+.content>div {
+    margin-bottom: 10px;
+}
+
+.youtube {
+    max-width: 400px
 }

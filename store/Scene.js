@@ -12,7 +12,7 @@ import { useActive, useGlobalId } from './ActiveContext';
 import * as TWEEN from '@tweenjs/tween.js';
 
 const Scene = ({ position, model, id }) => {
-  console.log('Scene rendered');
+  ('Scene rendered');
   const [Card_active, setActive] = useState(false);
   const meshPortalMaterialRef = useRef();
   const [localHovered, setLocalHovered] = useState(false); // ローカルの hovered 状態を保持
@@ -69,7 +69,8 @@ const Scene = ({ position, model, id }) => {
     setIsHovered(true);
     setLocalHovered(true);
 
-    event.stopPropagation(); // 他のオブジェクトへのイベント伝播を停止
+    event.stopPropagation();
+    // 他のオブジェクトへのイベント伝播を停止
   };
 
   const handlePointerOut = () => {

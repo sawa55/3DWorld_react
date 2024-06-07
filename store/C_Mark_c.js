@@ -66,7 +66,7 @@ function HighlightMarker({ gltf }) {
 
             } else if (event.key === 'c') {
                 // 'B' キー: group の位置をコンソールに出力
-                console.log(camera.position);
+                (camera.position);
             }
         };
 

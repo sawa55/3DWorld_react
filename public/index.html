@@ -2,11 +2,13 @@
 <html lang="en">
 
 <head>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>React App</title>
 </head>
 
 <body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <video id="video" loop crossOrigin="anonymous" playsinline style="display:none" muted>
     <source src="./Texture/video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
   </video>
@@ -14,11 +16,11 @@
     <source src="./Texture/code.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
   </video>
   <div id="root"></div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const video = document.getElementById('video');
       video.oncanplay = function () {
-        console.log('ビデオが読み込まれ、再生準備が整いました。');
       };
       video.onerror = function () {
         console.error('ビデオの読み込みに失敗しました。');
@@ -29,7 +31,6 @@
     document.addEventListener('DOMContentLoaded', function () {
       const video = document.getElementById('video2');
       video.oncanplay = function () {
-        console.log('ビデオが読み込まれ、再生準備が整いました。');
       };
       video.onerror = function () {
         console.error('ビデオの読み込みに失敗しました。');
@@ -46,7 +47,7 @@
       if (event.key === 'a' || event.key === 'A') {
         // 処理を停止する
         isProcessing = false;
-        console.log('Processing stopped because A key was pressed.');
+        ('Processing stopped because A key was pressed.');
       }
     });
 
@@ -56,7 +57,7 @@
         return; // 処理が停止されている場合は何もしない
       }
 
-      console.log('Processing...');
+      ('Processing...');
 
       // 次の処理をスケジュール
       setTimeout(continuousProcess, 1000);

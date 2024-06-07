@@ -1,57 +1,113 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useGlobalId } from './ActiveContext';
+import Youtube from './Youtube';
+import Test from './Test';
+
+
+
+
 
 const Text = () => {
-    console.log('Text rendered')
+    console.log('Text rendered');
     const { globalId, setGlobalId, } = useGlobalId();
-    const [showText, setShowText] = useState(false);
 
-    useEffect(() => {
-        if (globalId) {
-            setShowText(true); // globalIdがある場合、テキストを表示
-        } else {
-            setShowText(false); // globalIdがない場合、テキストを非表示
-        }
-    }, [globalId]);
+
+
+
+
 
     const handleEvent = (event) => {
-        event.stopPropagation(); // イベントの伝播を停止
+        event.stopPropagation();
+        // イベントの伝播を停止
         event.preventDefault();
-        console.log('Text clicked');
     };
+
+
 
 
     // globalIdに基づいて表示するテキストを決定
     const getTextContent = (id) => {
         switch (id) {
             case 'a':
-                return `使用可能言語
-    HTML,CSS
-    JavaScript
-    React.js
-    Three.js
-    Node.js
-    
-バージョン管理ツール
-    Git, GitHub
-    Backlog`;
+                return (
+                    <>
+                        <section>
+                            <div className="main_header">実績</div>
+                            <div className="content">
+                                <div>株式会社アド電通大阪WEBサイト制作<p>(Three.jsの実装とモデリングを担当)</p></div>
+                            </div>
+                        </section>
+                        <section>
+                            <div className="main_header">使用可能言語<p>フレームワーク</p></div>
+                            <div className="content">
+                                <ul>
+                                    <li>JavaScript</li>
+                                    <li>React.js</li>
+                                    <li>Three.js</li>
+                                    <li>A-Frame</li>
+                                    <li>Node.js</li>
+                                    <li>Python</li>
+                                    <li>VBA</li>
+                                </ul>
+                            </div>
+                            <div className="header">使用経験言語<p>フレームワーク</p></div>
+                            <div className="content">
+                                <ul>
+                                    <li>TypeScript</li>
+                                    <li>Vue.js</li>
+                                    <li>PHP</li>
+                                    <li>C#</li>
+                                </ul>
+                            </div>
+                            <div className="header">管理ツール</div>
+                            <div className="content">
+                                <ul>
+                                    <li>Git</li>
+                                    <li>GitHub</li>
+                                    <li>Backlog</li>
+                                    <li>Docker</li>
+                                </ul>
+                            </div>
+                        </section>
 
+                    </>
+                );
             case 'b':
-                return `使用ソフト
-
-  映像ツール
-
-    Blender
-    Unreal Engine
-    Davinci Resolve
-    
-  デザインツール
-
-    Canva
-    Figma`;
-
+                return (
+                    <>
+                        <section>
+                            <div className="main_header">実績</div>
+                            <div className="content">
+                                <div>日産自動車株式会社(CG協力)</div>
+                                <Youtube />
+                                <Test />
+                                <div>フジテレビ 呼び出し先生タナカ(CG制作)</div>
+                            </div>
+                        </section>
+                        <section>
+                            <div className="main_header">使用ソフト</div>
+                            <div className="content">
+                                <div className="header">映像ツール</div>
+                                <div className="content">
+                                    <ul>
+                                        <li>Blender</li>
+                                        <li>Unreal Engine</li>
+                                        <li>Davinci Resolve</li>
+                                    </ul>
+                                </div>
+                                <div className="header">デザインツール</div>
+                                <div className="content">
+                                    <ul>
+                                        <li>Canva</li>
+                                        <li>Figma</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                    </>
+                );
             default:
-                return 'IDが選択されていません。';
+            // return '<div class="content">IDが選択されていません。</div>';
         }
     };
 
@@ -62,9 +118,12 @@ const Text = () => {
             case 'b':
                 return 'プログラミングについて';
             default:
-                return 'IDが選択されていません。';
+            // return 'IDが選択されていません。';
         }
     };
+
+
+
 
     const handleSwitchId = () => {
         if (globalId === 'a') {
@@ -75,19 +134,21 @@ const Text = () => {
     };
 
     const handleButtonClick = () => {
-        setGlobalId(null);  // globalIdをnullに設定
+        setGlobalId(null);
     };
 
     return (
-        <div className={`text ${showText ? 'visible' : 'hidden'}`}
-            onClick={handleEvent}
-
-        >
-            <pre>{getTextContent(globalId)}</pre>
+        <main className={`text ${globalId ? 'visible' : 'hidden'}`}
+            onClick={handleEvent}>
             <button className='reset' onClick={handleButtonClick}>×</button>
-            {/* <p>Current Global ID: {globalId}</p> */}
-            <button onClick={handleSwitchId}>{getTextContent2(globalId)}</button>
-        </div>
+            <div className={'text_container'}>
+
+
+                <pre>{getTextContent(globalId)}</pre>
+                <button onClick={handleSwitchId}>{getTextContent2(globalId)}</button>
+            </div>
+        </main>
+
     );
 };
 

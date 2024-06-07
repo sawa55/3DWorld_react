@@ -5,15 +5,65 @@ import {
   Tetrahedron,
   Edges,
   Text3D,
+  shaderMaterial,
 } from "@react-three/drei";
 import * as THREE from "three";
 import React, { useRef, useState, useEffect } from "react";
-import { useFrame, useThree } from "@react-three/fiber"
+import { useFrame, useThree, extend } from "@react-three/fiber"
 import { useActive, useGlobalId } from './ActiveContext';
+import { gsap } from 'gsap';
 
 
+const CustomShaderMaterial = shaderMaterial(
+  // Uniforms
+  {
+    color: new THREE.Color(0x00ffff),
+    time: 0,
+
+    uAnimation: { value: 0 } // アニメーションの進行状況を示すユニフォーム（0から1）
+  },
+  // Vertex Shader
+  `uniform float time;
+ uniform float uAnimation;
+  void main() {
+    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+
+    // 中心からの距離を計算
+    float distance = length(modelPosition.xy);
+
+
+   
+      modelPosition.z += sin(distance * 10.0 - time * 2.0) * 0.05 *uAnimation;
+    
+
+    vec4 viewPosition = viewMatrix * modelPosition;
+    vec4 projectedPosition = projectionMatrix * viewPosition;
+    gl_Position = projectedPosition;
+  }`,
+  // Fragment Shader
+  `uniform vec3 color;
+  void main() {
+    gl_FragColor = vec4(color, 1.0);
+  }`
+);
+extend({ CustomShaderMaterial });
+
+
+function AnimationEffect(material, targetValue) {
+  if (material && material.uniforms && material.uniforms.uAnimation) {
+    gsap.to(material.uniforms.uAnimation, {
+      value: targetValue,
+      duration: 2,
+      ease: 'power2',
+      repeat: 0,  // 繰り返しを無効化
+      yoyo: false  // yoyoを無効化
+    });
+  } else {
+    console.error('AnimationEffect cannot access material uniforms');
+  }
+}
 const PortalMaterialImpl = ({ position, model, id }) => {
-  console.log('portalMaterialImpl rendered');
+  ('portalMaterialImpl rendered');
   const [Card_active, setActive] = useState(false);
   const tetraRef = useRef();
 
@@ -39,14 +89,32 @@ const PortalMaterialImpl = ({ position, model, id }) => {
 
   useFrame(() => {
     if (textRef.current) {
-      const distance = camera.position.x - position[0]; // カメラとテキストのX座標の差
-      const offset = Math.sign(distance) * Math.min(maxOffset, Math.abs(distance * .8)); // オフセットを計算し、上限を設ける // オフセットを計算し、上限を設ける
-      textRef.current.position.x = initialPosition.x + offset; // 新しいX座標を設定
-      textRef.current.geometry.center(); // テキストがカメラの位置を向くように設定
+      const distance = camera.position.x - position[0];
+      const offset = Math.sign(distance) * Math.min(maxOffset, Math.abs(distance * .8));
+      textRef.current.position.x = initialPosition.x + offset;
+      textRef.current.geometry.center();
       textRef.current.lookAt(camera.position);
 
     }
   });
+
+  const shaderRef = useRef();
+
+  useFrame(({ clock }) => {
+
+    shaderRef.current.uniforms.time.value = clock.getElapsedTime();
+
+
+  });
+  useEffect(() => {
+    if (localHovered) {
+      AnimationEffect(shaderRef.current, 1);
+    } else {
+      AnimationEffect(shaderRef.current, 0);
+    }
+  }, [localHovered]);
+
+
 
 
 
@@ -72,7 +140,8 @@ const PortalMaterialImpl = ({ position, model, id }) => {
     setIsHovered(true);
     setLocalHovered(true);
 
-    event.stopPropagation(); // 他のオブジェクトへのイベント伝播を停止
+    event.stopPropagation();
+    // 他のオブジェクトへのイベント伝播を停止
   };
 
   const handlePointerOut = () => {
@@ -91,6 +160,7 @@ const PortalMaterialImpl = ({ position, model, id }) => {
       setActive(false);
     }
   }, [globalId]);
+  const geometry = new THREE.BoxGeometry(1, 0.4, 0.01, 10, 5, 1);
 
 
 
@@ -111,15 +181,16 @@ const PortalMaterialImpl = ({ position, model, id }) => {
         <mesh
           // args={[0.6, 0.6, 0.01]}
           // radius={0.01}
+          geometry={geometry}
           onClick={doubleClickHandler}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
-          <boxGeometry
+          {/* <boxGeometry
             args={[1, 0.4, 0.01]}
             radius={0.01}
-          />
-          <meshBasicMaterial color="#00FFFF" />
+          /> */}
+          <customShaderMaterial ref={shaderRef} />
           <Edges scale={1.1} color={localHovered ? "yellow" : "black"} />
         </mesh>
         <Text3D

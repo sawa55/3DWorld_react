@@ -15,7 +15,7 @@ function Keyboard() {
         const handleKeyPress = (event) => {
             if (event.key === 'i') {
                 // コンテキストからすべての変数を取得してコンソールに出力
-                console.log({
+                ({
                     isActive: isActive,
 
                     isAnimating: isAnimating,

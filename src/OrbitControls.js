@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { useActive } from './ActiveContext';
 
 export function SetupOrbitControls(camera, domElement) {
-    console.log('SetupOrbitControls');
+    ('SetupOrbitControls');
     const controls = new OrbitControls(camera, domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.1;

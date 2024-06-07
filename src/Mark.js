@@ -7,7 +7,7 @@ import { SetupOrbitControls } from './OrbitControls';
 import { useActive } from './ActiveContext';
 
 function HighlightMarker({ gltf }) {
-    console.log('HighlightMarker rendered');
+    ('HighlightMarker rendered');
     const [markerPosition, setMarkerPosition] = useState([0, 0, 0]);
     const [visible, setVisible] = useState(false);
     const { raycaster, pointer, camera, gl, scene } = useThree();
@@ -45,10 +45,20 @@ function HighlightMarker({ gltf }) {
                 }
             }
         };
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+            window.addEventListener('touchmove', Intersect);
+        } else {
+            window.addEventListener('mousemove', Intersect);
+        }
 
-        window.addEventListener('mousemove', Intersect);
+
         return () => {
-            window.removeEventListener('mousemove', Intersect);
+            if (isMobile) {
+                window.removeEventListener('touchmove', Intersect);
+            }
+            else { window.removeEventListener('mousemove', Intersect); }
+
         };
     }, [gltf, isHovered, raycaster, pointer, camera]);
 
@@ -57,7 +67,6 @@ function HighlightMarker({ gltf }) {
     });
 
     const handleMarkerClick = () => {
-        console.log(isActive)
         if (visible && isActive && !isHovered && !isAnimating) {
             const targetPosition = new THREE.Vector3(...markerPosition);
             const startQuaternion = camera.quaternion.clone();

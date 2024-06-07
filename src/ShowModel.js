@@ -3,8 +3,7 @@ import { useGlobalId } from './ActiveContext';
 
 const ShowModel = ({ gltf, cardGltf, cardGltf_a }) => {
     const { globalId } = useGlobalId();
-    console.log(cardGltf)
-    console.log(globalId)
+
 
     let selectedModel;
     switch (globalId) {

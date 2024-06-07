@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+
+
 function Loader({ setGltf, setCardGltf, setCardGltf_a, onLoaded }) {
     useEffect(() => {
         const loader = new GLTFLoader();

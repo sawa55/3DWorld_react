@@ -12,6 +12,8 @@ export const ActiveProvider = ({ children }) => {
     const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         const handleMouseDown = () => {
             setIsActive(true);
             moveCount.current = 0;
@@ -28,14 +30,30 @@ export const ActiveProvider = ({ children }) => {
             setIsActive(false);
         };
 
-        document.addEventListener('mousedown', handleMouseDown);
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
+        const handleTouchStart = handleMouseDown;
+        const handleTouchMove = handleMouseMove;
+        const handleTouchEnd = handleMouseUp;
+
+        if (isMobile) {
+            document.addEventListener('touchstart', handleTouchStart);
+            document.addEventListener('touchmove', handleTouchMove);
+            document.addEventListener('touchend', handleTouchEnd);
+        } else {
+            document.addEventListener('mousedown', handleMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        }
 
         return () => {
-            document.removeEventListener('mousedown', handleMouseDown);
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
+            if (isMobile) {
+                document.removeEventListener('touchstart', handleTouchStart);
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handleTouchEnd);
+            } else {
+                document.removeEventListener('mousedown', handleMouseDown);
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            }
         };
     }, []);
 
