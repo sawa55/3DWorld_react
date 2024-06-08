@@ -9,17 +9,21 @@
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <video id="video" loop crossOrigin="anonymous" playsinline style="display:none" muted>
-    <source src="./Texture/video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+
+
+  <video id="video1" loop crossOrigin="anonymous" playsinline style="display:none" muted>
+    <source src="./Texture/video1.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
   </video>
   <video id="video2" loop crossOrigin="anonymous" playsinline style="display:none" muted>
     <source src="./Texture/code.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
   </video>
+
+
   <div id="root"></div>
 
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const video = document.getElementById('video');
+      const video = document.getElementById('video1');
       video.oncanplay = function () {
       };
       video.onerror = function () {
@@ -36,8 +40,8 @@
         console.error('ビデオの読み込みに失敗しました。');
       };
     });
-  </script>
-
+  </script> -->
+  <!-- 
   <script>
     let isProcessing = true;
 
@@ -65,7 +69,7 @@
 
     // 処理を開始
     continuousProcess();
-  </script>
+  </script> -->
 
 </body>
 

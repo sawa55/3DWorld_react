@@ -6,56 +6,57 @@ export const useActive = () => useContext(ActiveContext);
 
 export const ActiveProvider = ({ children }) => {
     const [isActive, setIsActive] = useState(false);
+    const isActiveRef = useRef(isActive);
     const moveCount = useRef(0);
+    const touchCount = useRef(0);
     const [isHovered, setIsHovered] = useState(false);
 
-    const [isAnimating, setIsAnimating] = useState(false);
+
+    useEffect(() => {
+        isActiveRef.current = isActive; // 更新 isActiveRef 以保持最新状态
+    }, [isActive]); // 依赖于 isActive 的变化
 
     useEffect(() => {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         const handleMouseDown = () => {
             setIsActive(true);
-            moveCount.current = 0;
+            if (isMobile) {
+                touchCount.current = 0;
+            } else {
+                moveCount.current = 0;
+            }
         };
 
         const handleMouseMove = () => {
             moveCount.current += 1;
-            if (moveCount.current >= 6) {
-                setIsActive(false);
+            touchCount.current += 1;
+            if (isMobile) {
+                if (touchCount.current >= 6) {
+                    setIsActive(false);
+                }
+            } else {
+                if (moveCount.current >= 6) {
+                    setIsActive(false);
+                }
             }
-        };
-
-        const handleMouseUp = () => {
-            setIsActive(false);
         };
 
         const handleTouchStart = handleMouseDown;
         const handleTouchMove = handleMouseMove;
-        const handleTouchEnd = handleMouseUp;
 
-        if (isMobile) {
-            document.addEventListener('touchstart', handleTouchStart);
-            document.addEventListener('touchmove', handleTouchMove);
-            document.addEventListener('touchend', handleTouchEnd);
-        } else {
-            document.addEventListener('mousedown', handleMouseDown);
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        }
+        document.addEventListener('mousedown', handleMouseDown);
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('touchstart', handleTouchStart);
+        document.addEventListener('touchmove', handleTouchMove);
 
         return () => {
-            if (isMobile) {
-                document.removeEventListener('touchstart', handleTouchStart);
-                document.removeEventListener('touchmove', handleTouchMove);
-                document.removeEventListener('touchend', handleTouchEnd);
-            } else {
-                document.removeEventListener('mousedown', handleMouseDown);
-                document.removeEventListener('mousemove', handleMouseMove);
-                document.removeEventListener('mouseup', handleMouseUp);
-            }
+            document.removeEventListener('mousedown', handleMouseDown);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('touchstart', handleTouchStart);
+            document.removeEventListener('touchmove', handleTouchMove);
         };
-    }, []);
+    }, []); // 依赖数组为空，因此只在组件挂载时运行
 
     return (
         <ActiveContext.Provider value={{
@@ -63,10 +64,6 @@ export const ActiveProvider = ({ children }) => {
             setIsActive,
             isHovered,
             setIsHovered,
-
-            isAnimating,
-            setIsAnimating,
-
         }}>
             {children}
         </ActiveContext.Provider>
@@ -84,5 +81,19 @@ export const GlobalIdProvider = ({ children }) => {
         <GlobalIdContext.Provider value={{ globalId, setGlobalId }}>
             {children}
         </GlobalIdContext.Provider>
+    );
+};
+
+const TextHoveredContext = createContext();
+
+export const useHover = () => useContext(TextHoveredContext);
+
+export const UseHoveredProvider = ({ children }) => {
+    const [isHoveredJsx, setIsHoveredJsx] = useState(false);
+
+    return (
+        <TextHoveredContext.Provider value={{ isHoveredJsx, setIsHoveredJsx }}>
+            {children}
+        </TextHoveredContext.Provider>
     );
 };

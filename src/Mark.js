@@ -4,7 +4,7 @@ import { Circle } from '@react-three/drei';
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 import { SetupOrbitControls } from './OrbitControls';
-import { useActive } from './ActiveContext';
+import { useActive, useHover } from './ActiveContext';
 
 function HighlightMarker({ gltf }) {
     ('HighlightMarker rendered');
@@ -12,7 +12,9 @@ function HighlightMarker({ gltf }) {
     const [visible, setVisible] = useState(false);
     const { raycaster, pointer, camera, gl, scene } = useThree();
     const controls = useRef();
-    const { isActive, isHovered, isAnimating } = useActive();
+    const { isActive, isHovered } = useActive();
+    const isAnimating = useRef(false);
+    const { isHoveredJsx, setIsHoveredJsx } = useHover();
 
 
     useEffect(() => {
@@ -30,12 +32,15 @@ function HighlightMarker({ gltf }) {
 
 
     useEffect(() => {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const Intersect = () => {
             if (gltf && !isHovered) {
                 raycaster.setFromCamera(pointer, camera);
                 const intersects = raycaster.intersectObjects(gltf.scene.children, true);
                 const boxIntersect = intersects.find(intersect => intersect.object.name === "Floor");
-                if (boxIntersect) {
+                if (boxIntersect
+                    && !isHoveredJsx
+                ) {
                     const position = boxIntersect.point.clone();
                     position.y += 0.01;
                     setMarkerPosition(position.toArray());
@@ -45,9 +50,11 @@ function HighlightMarker({ gltf }) {
                 }
             }
         };
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         if (isMobile) {
             window.addEventListener('touchmove', Intersect);
+            window.addEventListener('touchstart', Intersect);
+            window.addEventListener('touchstart', handleMarkerClick);
         } else {
             window.addEventListener('mousemove', Intersect);
         }
@@ -60,16 +67,33 @@ function HighlightMarker({ gltf }) {
             else { window.removeEventListener('mousemove', Intersect); }
 
         };
-    }, [gltf, isHovered, raycaster, pointer, camera]);
+    }, [gltf, isHovered, raycaster, pointer, camera, isHoveredJsx]);
+
+    useEffect(() => {
+        const handleMouseUp = () => {
+            handleMarkerClick();
+        };
+
+        document.addEventListener('mouseup', handleMouseUp);
+
+        // クリーンアップ関数を追加
+        return () => {
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [visible, isActive, isHovered, isHoveredJsx]);
 
     useFrame(({ clock }) => {
         TWEEN.update();
     });
 
     const handleMarkerClick = () => {
-        if (visible && isActive && !isHovered && !isAnimating) {
+        console.log(isHoveredJsx + "isHoveredJsx");
+
+        if (visible && isActive && !isHovered) {
             const targetPosition = new THREE.Vector3(...markerPosition);
             const startQuaternion = camera.quaternion.clone();
+            isAnimating.current = true;
+
             new TWEEN.Tween(camera.position)
                 .to({
                     x: targetPosition.x,
@@ -81,6 +105,7 @@ function HighlightMarker({ gltf }) {
                     if (controls.current) {
                         const newTarget = camera.position.clone();
                         const direction = new THREE.Vector3();
+                        // isAnimating.current = false;
                         camera.getWorldDirection(direction);
                         direction.multiplyScalar(0.01);
                         newTarget.add(direction);
@@ -104,7 +129,9 @@ function HighlightMarker({ gltf }) {
     return (
         <>
             {visible && !isHovered && (
-                <Circle args={[0.2, 32]} position={markerPosition} rotation={[Math.PI / 2, 0, 0]} onClick={handleMarkerClick}>
+                <Circle args={[0.2, 32]} position={markerPosition} rotation={[Math.PI / 2, 0, 0]}
+                // onClick={handleMarkerClick}
+                >
                     <meshBasicMaterial color="white" transparent opacity={0.5} side={THREE.DoubleSide} />
                 </Circle>
             )}

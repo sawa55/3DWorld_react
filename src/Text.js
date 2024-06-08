@@ -1,36 +1,56 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { useGlobalId } from './ActiveContext';
+import { useGlobalId, useHover } from './ActiveContext';
 import Youtube from './Youtube';
 import Test from './Test';
 
 
-
-
-
 const Text = () => {
-    console.log('Text rendered');
+
     const { globalId, setGlobalId, } = useGlobalId();
-
-
-
-
-
-
+    const { setIsHoveredJsx } = useHover();
+    console.log(globalId);
     const handleEvent = (event) => {
         event.stopPropagation();
         // イベントの伝播を停止
         event.preventDefault();
     };
 
+    const handleSwitchId = () => {
+        if (globalId === 'a') {
+            setGlobalId('b');
+        } else if (globalId === 'b') {
+            setGlobalId('a');
+        }
+    };
+
+    const handleButtonClick = () => {
+        setGlobalId(null);
+    };
+
+    const textMouseEnter = () => {
+        setIsHoveredJsx(true);
+        console.log('hovered');
+    }
+    const textMouseLeave = () => {
+        setIsHoveredJsx(false);
+    }
 
 
+    return (
+        <main
+            className={`text_main ${globalId ? 'visible' : 'hidden'}`}
+            onClick={handleEvent}
+            onMouseEnter={textMouseEnter}
+            onMouseLeave={textMouseLeave}
+        >
+            <button className='reset' onClick={handleButtonClick}>×</button>
 
-    // globalIdに基づいて表示するテキストを決定
-    const getTextContent = (id) => {
-        switch (id) {
-            case 'a':
-                return (
-                    <>
+            <div className={`text ${globalId ? 'visible' : 'hidden'}`}>
+                <div className={`text_container 
+            ${globalId === 'a' ? 'true' : 'false'} 
+            ${globalId ? 'Show' : 'hidden'}`}>
+
+                    <pre>
                         <section>
                             <div className="main_header">実績</div>
                             <div className="content">
@@ -69,18 +89,21 @@ const Text = () => {
                                 </ul>
                             </div>
                         </section>
+                    </pre>
+                    <button onClick={handleSwitchId}>'3DCGについて'</button>
+                </div>
+                <div className={`text_container 
+            ${globalId === 'b' ? 'true' : 'false'}
+            ${globalId ? 'Show' : 'hidden'}`}>
 
-                    </>
-                );
-            case 'b':
-                return (
-                    <>
+
+                    <pre>
                         <section>
                             <div className="main_header">実績</div>
                             <div className="content">
                                 <div>日産自動車株式会社(CG協力)</div>
                                 <Youtube />
-                                <Test />
+
                                 <div>フジテレビ 呼び出し先生タナカ(CG制作)</div>
                             </div>
                         </section>
@@ -104,48 +127,9 @@ const Text = () => {
                                 </div>
                             </div>
                         </section>
-                    </>
-                );
-            default:
-            // return '<div class="content">IDが選択されていません。</div>';
-        }
-    };
-
-    const getTextContent2 = (id) => {
-        switch (id) {
-            case 'a':
-                return '3DCGについて';
-            case 'b':
-                return 'プログラミングについて';
-            default:
-            // return 'IDが選択されていません。';
-        }
-    };
-
-
-
-
-    const handleSwitchId = () => {
-        if (globalId === 'a') {
-            setGlobalId('b');
-        } else if (globalId === 'b') {
-            setGlobalId('a');
-        }
-    };
-
-    const handleButtonClick = () => {
-        setGlobalId(null);
-    };
-
-    return (
-        <main className={`text ${globalId ? 'visible' : 'hidden'}`}
-            onClick={handleEvent}>
-            <button className='reset' onClick={handleButtonClick}>×</button>
-            <div className={'text_container'}>
-
-
-                <pre>{getTextContent(globalId)}</pre>
-                <button onClick={handleSwitchId}>{getTextContent2(globalId)}</button>
+                    </pre>
+                    <button onClick={handleSwitchId}>プログラミングについて</button>
+                </div>
             </div>
         </main>
 

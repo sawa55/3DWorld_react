@@ -4,27 +4,20 @@ const CustomShaderMaterial = shaderMaterial(
         color: new THREE.Color(0x00ffff),
         time: 0,
 
-        uAnimation: { value: 0 } // アニメーションの進行状況を示すユニフォーム（0から1）
+        uAnimation: { value: 0 }
     },
     // Vertex Shader
     `uniform float time;
-   uniform float uAnimation;
+    uniform float uAnimation;
     void main() {
       vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-  
-      // 中心からの距離を計算
       float distance = length(modelPosition.xy);
-  
-  
-     
         modelPosition.z += sin(distance * 10.0 - time * 2.0) * 0.05 *uAnimation;
-      
-  
       vec4 viewPosition = viewMatrix * modelPosition;
       vec4 projectedPosition = projectionMatrix * viewPosition;
       gl_Position = projectedPosition;
     }`,
-    // Fragment Shader
+
     `uniform vec3 color;
     void main() {
       gl_FragColor = vec4(color, 1.0);

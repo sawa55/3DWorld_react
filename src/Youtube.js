@@ -5,7 +5,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 const Youtube = React.memo(({ videoId, opts }) => {
     const optss = useMemo(() => ({
         height: '300',
-        width: "100%",
+        width: "95%",
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             // autoplay: 1,

@@ -33,7 +33,6 @@ function Loader({ setGltf, setCardGltf, setCardGltf_a, onLoaded }) {
             texture.repeat.x = -1;  // テクスチャを水平に反転
 
             const Display = cardGltf.scene.children.find(child => child.name === 'Display');
-            console.log(Display);
             if (Display) {
                 // MeshBasicMaterialを使用してマテリアルを作成
                 const material = new THREE.MeshBasicMaterial({
@@ -53,7 +52,7 @@ function Loader({ setGltf, setCardGltf, setCardGltf_a, onLoaded }) {
         loader.load('./Model/Light_bake_3D.glb', (cardGltf_a) => {
             setCardGltf_a(cardGltf_a);
 
-            const video = document.getElementById('video');
+            const video = document.getElementById('video1');
             video.play();
             const texture = new THREE.VideoTexture(video);
             texture.minFilter = THREE.LinearFilter;

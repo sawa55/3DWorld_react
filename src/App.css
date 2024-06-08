@@ -13,7 +13,6 @@ html,
     display: flex;
     width: 100%;
     height: 100%;
-    /* overflow: hidden; */
 
 }
 
@@ -28,57 +27,95 @@ html,
 }
 
 
-.text {
-    background-color: rgba(256, 256, 256, 0.9);
-
-
+.text_main {
     height: 50%;
     width: 100%;
     margin: 0px;
     position: absolute;
+    top: 50%;
+}
+
+.text_main.visible {
+    top: 50%;
+
+
+}
+
+.text_main.hidden {
     top: 100%;
+}
+
+
+.text {
+    background-color: rgba(256, 256, 256, 0.9);
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    position: absolute;
+    top: 50%;
+
+
+
     /* display: flex;
     justify-content: center; */
 
     transition: right 0.5s ease;
-    pointer-events: auto;
+    /* pointer-events: auto; */
     z-index: 1;
     font-size: 25px;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     transition: top 0.5s ease-in-out,
         background-color 1s ease-in-out;
 
 }
 
 .text.visible {
-    top: 50%;
+    top: 0%;
 
 
 }
 
 .text.hidden {
     top: 100%;
-
-
 }
 
 .text_container {
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-top: 45px;
-    /* max-width: 50%; */
+    position: absolute;
+    width: 100%;
+    margin-left: 5%;
+    left: 100%;
+    transition: left 0.5s;
 }
+
+.text_container.true {
+    left: 0%;
+}
+
+.text_container.false {
+    left: 200%;
+    transition-duration: 0s;
+}
+
+.text_container.hidden {
+    left: 200%;
+    transition-duration: 0.5s;
+}
+
+
 
 
 
 .reset {
-    position: fixed;
+    position: relative;
     /* left: -20px; */
-    top: 44%;
+    /* top: calc(50% - 45px); */
+    top: -45px;
     left: 0;
     width: 45px;
     /* ボタンの幅 */
     height: 45px;
+    z-index: 2;
 
     /* ボタンの高さ */
     background-color: rgba(240, 220, 200, 0.8);
@@ -101,16 +138,15 @@ html,
     /* トランジションを追加 */
 }
 
-.text.hidden .reset {
+.text_main.hidden .reset {
     display: block;
     /* displayをnoneからblockに変更 */
     opacity: 0;
     /* 隠れている間は不透明度を0に */
 }
 
-.text.visible .reset {
+.text_main.visible .reset {
     opacity: 1;
-    /* .textが.hiddenでないとき、不透明度を1に */
 }
 
 .reset:hover {
@@ -148,6 +184,80 @@ section {
     margin-bottom: 10px;
 }
 
-.youtube {
-    max-width: 400px
+
+@media(min-width:800px) {
+
+    .text {
+        height: 100%;
+        width: 100%;
+        min-width: 400px;
+        margin: 0px;
+        position: absolute;
+        right: 0%;
+
+        /* display: flex;
+        justify-content: center; */
+
+        transition: right 0.5s ease;
+        /* pointer-events: auto; */
+
+        transition: right 0.5s ease-in-out;
+
+
+    }
+
+    .text.visible {
+        top: 0%;
+
+
+    }
+
+    .text.hidden {
+        top: 0%;
+        right: -100%
+    }
+
+
+    .text_main {
+        height: 100%;
+        width: 25%;
+        min-width: 400px;
+        margin: 0px;
+        position: absolute;
+        right: 0%;
+
+        /* display: flex;
+        justify-content: center; */
+
+        transition: right 0.5s ease;
+        /* pointer-events: auto; */
+
+        transition: right 0.5s ease-in-out;
+
+
+    }
+
+    .text_main.visible {
+        top: 0%;
+
+
+    }
+
+    .text_main.hidden {
+        top: 0%;
+        right: -100%
+    }
+
+    .reset {
+        /* left: -20px; */
+        top: 0%;
+        left: -45px;
+        width: 45px;
+        /* max-width: 550px; */
+        /* ボタンの幅 */
+        height: 45px;
+        /* clip-path: inset(0 33px 0 0px); */
+
+    }
+
 }

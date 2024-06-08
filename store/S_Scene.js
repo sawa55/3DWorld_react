@@ -28,24 +28,7 @@ const Scene = ({ position, model, id }) => {
   // groupのpositionを逆転させる
   const inversePosition = position.map(coord => -coord);
 
-  // useFrame((_, delta) => {
-  //   TWEEN.update();
 
-  //   // アニメーションの条件をフック内でチェック
-  //   if (!blendTweenRef.current || blendTargetRef.current !== (Card_active ? 1 : 0)) {
-  //     blendTargetRef.current = Card_active ? 1 : 0;
-  //     if (blendTweenRef.current) blendTweenRef.current.stop();
-
-  //     setIsAnimating(true); // アニメーション開始
-  //     blendTweenRef.current = new TWEEN.Tween(meshPortalMaterialRef.current)
-  //       .to({ blend: blendTargetRef.current }, 1000)
-  //       .easing(TWEEN.Easing.Quadratic.Out)
-  //       .onComplete(() => {
-  //         setIsAnimating(false); // アニメーション完了時に状態を更新
-  //       })
-  //       .start();
-  //   }
-  // });
 
   const doubleClickHandler = (event) => {
     if (!isAnimating && isActive) { // アニメーションが進行中でなければクリックを受け付ける
