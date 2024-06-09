@@ -25,9 +25,12 @@ function App() {
                                 cardGltf={cardGltf}
                                 cardGltf_a={cardGltf_a}
                             />
-                            <HighlightMarker gltf={gltf} />
                             <Portal position={[1, 0.2, -0.2]} model={cardGltf} id={"a"} />
                             <Portal position={[-1, 0.2, -0.2]} model={cardGltf_a} id={"b"} />
+
+                            <HighlightMarker gltf={gltf} />
+
+
                         </>
                     )}
                 </Canvas>

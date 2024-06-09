@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { useGlobalId, useHover } from './ActiveContext';
+import { useGlobalId, useHover, useActive } from './ActiveContext';
 import Youtube from './Youtube';
 import Test from './Test';
+
 
 
 const Text = () => {
 
     const { globalId, setGlobalId, } = useGlobalId();
     const { setIsHoveredJsx } = useHover();
-    console.log(globalId);
+    const { isMobile } = useActive();
     const handleEvent = (event) => {
         event.stopPropagation();
         // イベントの伝播を停止
@@ -23,27 +24,39 @@ const Text = () => {
         }
     };
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (event) => {
         setGlobalId(null);
+        setIsHoveredJsx(false);
+        event.stopPropagation();
+        event.preventDefault();
     };
 
     const textMouseEnter = () => {
         setIsHoveredJsx(true);
-        console.log('hovered');
     }
     const textMouseLeave = () => {
         setIsHoveredJsx(false);
+    }
+
+    const handleTouchStart = (event) => {
+        event.stopPropagation();
+        event.preventDefault();
     }
 
 
     return (
         <main
             className={`text_main ${globalId ? 'visible' : 'hidden'}`}
-            onClick={handleEvent}
-            onMouseEnter={textMouseEnter}
-            onMouseLeave={textMouseLeave}
+            onClick={!isMobile ? handleEvent : undefined}
+            onTouchStart={!isMobile ? undefined : handleTouchStart}
+            // onTouchEnd={!isMobile ? undefined : handleTouchEnd}
+            onMouseEnter={!isMobile ? textMouseEnter : undefined}
+            onMouseLeave={!isMobile ? textMouseLeave : undefined}
         >
-            <button className='reset' onClick={handleButtonClick}>×</button>
+            <button className='reset'
+                onClick={handleButtonClick}
+                onTouchStart={handleButtonClick}
+            >×</button>
 
             <div className={`text ${globalId ? 'visible' : 'hidden'}`}>
                 <div className={`text_container 
@@ -74,9 +87,10 @@ const Text = () => {
                             <div className="content">
                                 <ul>
                                     <li>TypeScript</li>
+                                    <li>Next.js</li>
                                     <li>Vue.js</li>
                                     <li>PHP</li>
-                                    <li>C#</li>
+                                    <li>C#  Unity(AR開発)</li>
                                 </ul>
                             </div>
                             <div className="header">管理ツール</div>
@@ -90,7 +104,7 @@ const Text = () => {
                             </div>
                         </section>
                     </pre>
-                    <button onClick={handleSwitchId}>'3DCGについて'</button>
+                    <button onClick={handleSwitchId}>3DCGについて</button>
                 </div>
                 <div className={`text_container 
             ${globalId === 'b' ? 'true' : 'false'}

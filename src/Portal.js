@@ -10,8 +10,10 @@ import {
 import * as THREE from "three";
 import React, { useRef, useState, useEffect } from "react";
 import { useFrame, useThree, extend } from "@react-three/fiber"
-import { useActive, useGlobalId } from './ActiveContext';
+import { useActive, useGlobalId, usePortalClicked } from './ActiveContext';
 import { gsap } from 'gsap';
+
+
 
 
 const CustomShaderMaterial = shaderMaterial(
@@ -70,10 +72,10 @@ const PortalMaterialImpl = ({ position, model, id }) => {
   const [localHovered, setLocalHovered] = useState(false); // ローカルの hovered 状態を保持
   const { isActive,
     setIsHovered,
-    isAnimating,
-
+    isMobile
   } = useActive();
   const { globalId, setGlobalId } = useGlobalId();
+  const { setisPortalClicked } = usePortalClicked();
 
   useFrame((state, delta) => {
     if (tetraRef.current) {
@@ -114,19 +116,15 @@ const PortalMaterialImpl = ({ position, model, id }) => {
     }
   }, [localHovered]);
 
-
-
-
-
   const inversePosition = position.map(coord => -coord);
 
   const doubleClickHandler = (event) => {
-    if (!isAnimating && isActive) { // アニメーションが進行中でなければクリックを受け付ける
-      setActive(!Card_active);
+
+    if (isActive) {
       if (globalId === id) {
-        setGlobalId(null); // globalIdが現在のidと同じ場合はnullに設定
+        setGlobalId(null);
       } else {
-        setGlobalId(id); // それ以外の場合はidを設定
+        setGlobalId(id);
       }
 
     }
@@ -145,21 +143,38 @@ const PortalMaterialImpl = ({ position, model, id }) => {
   };
 
   const handlePointerOut = () => {
-
     setIsHovered(false);
     setLocalHovered(false);
 
   };
 
-  useEffect(() => {
-    if (globalId === null) {
-      setActive(false);  // globalIdがnullの場合、Card_activeをfalseに設定
-    } else if (globalId === id) {
-      setActive(true);
-    } else if (globalId !== id) {
-      setActive(false);
-    }
-  }, [globalId]);
+  // ここで関数を定義
+  const portalTouchStart = (evnet) => {
+    setisPortalClicked(true);
+    setIsHovered(true);
+    setLocalHovered(true);
+  };
+  const portalTouchEnd = () => {
+    setIsHovered(false);
+    setLocalHovered(false);
+  }
+
+  // useEffect(() => {
+  //   // イベントリスナーを登録
+  //   window.addEventListener('touchstart', portalTouchStart);
+  //   window.addEventListener('touchend', portalTouchEnd);
+
+  //   // コンポーネントのクリーンアップ時にイベントリスナーを削除
+  //   return () => {
+  //     window.removeEventListener('touchstart', portalTouchStart);
+  //     window.removeEventListener('touchend', portalTouchEnd);
+  //   };
+  // }, []); // 空の依存配列を指定して、マウント時とアンマウント時にのみ実行されるようにする
+
+
+
+
+
   const geometry = new THREE.BoxGeometry(1, 0.4, 0.01, 10, 5, 1);
 
 
@@ -172,8 +187,7 @@ const PortalMaterialImpl = ({ position, model, id }) => {
           ref={tetraRef}
           args={localHovered ? [0.2, 0] : [0.1, 0]}
           position={localHovered ? [0, 0.6, 0] : [0, 0.4, 0]}
-          onPointerOver={handlePointerOver}
-          onPointerOut={handlePointerOut}
+
         >
           <meshBasicMaterial color={localHovered ? "red" : "royalblue"} />
         </Tetrahedron>
@@ -182,14 +196,19 @@ const PortalMaterialImpl = ({ position, model, id }) => {
           // args={[0.6, 0.6, 0.01]}
           // radius={0.01}
           geometry={geometry}
-          onClick={doubleClickHandler}
-          onPointerOver={handlePointerOver}
-          onPointerOut={handlePointerOut}
+          onPointerDown={!isMobile ? undefined : portalTouchStart}
+          onPointerUp={!isMobile ? undefined : portalTouchEnd}
+
+          onClick={
+            // !isMobile ? 
+            doubleClickHandler
+            //  : undefined
+          }
+
+          onPointerOver={!isMobile ? handlePointerOver : undefined}
+          onPointerOut={!isMobile ? handlePointerOut : undefined}
         >
-          {/* <boxGeometry
-            args={[1, 0.4, 0.01]}
-            radius={0.01}
-          /> */}
+
           <customShaderMaterial ref={shaderRef} />
           <Edges scale={1.1} color={localHovered ? "yellow" : "black"} />
         </mesh>

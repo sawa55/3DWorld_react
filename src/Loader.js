@@ -62,7 +62,6 @@ function Loader({ setGltf, setCardGltf, setCardGltf_a, onLoaded }) {
             texture.repeat.x = -1;  // テクスチャを水平に反転
 
             const plane = cardGltf_a.scene.children.find(child => child.name === 'Plane');
-            console.log(plane);
             if (plane) {
                 // MeshBasicMaterialを使用してマテリアルを作成
                 const material = new THREE.MeshBasicMaterial({
