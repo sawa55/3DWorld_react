@@ -148,6 +148,8 @@ const PortalMaterialImpl = ({ position, model, id }) => {
 
   };
 
+
+
   // ここで関数を定義
   const portalTouchStart = (evnet) => {
     setisPortalClicked(true);
@@ -205,8 +207,16 @@ const PortalMaterialImpl = ({ position, model, id }) => {
             //  : undefined
           }
 
-          onPointerOver={!isMobile ? handlePointerOver : undefined}
-          onPointerOut={!isMobile ? handlePointerOut : undefined}
+          onPointerOver={
+            // !isMobile ? 
+            handlePointerOver
+            //  : undefined
+          }
+          onPointerOut={
+            // !isMobile ? 
+            handlePointerOut
+            //  : undefined
+          }
         >
 
           <customShaderMaterial ref={shaderRef} />

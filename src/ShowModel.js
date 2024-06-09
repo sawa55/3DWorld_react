@@ -21,7 +21,6 @@ const ShowModel = ({ gltf, cardGltf, cardGltf_a }) => {
 
 
     const handleTest = () => {
-        console.log("test");
         setisPortalClicked(false);
     };
 

@@ -10,9 +10,10 @@ const Text = () => {
     const { globalId, setGlobalId, } = useGlobalId();
     const { setIsHoveredJsx } = useHover();
     const { isMobile } = useActive();
+
+
     const handleEvent = (event) => {
         event.stopPropagation();
-        // イベントの伝播を停止
         event.preventDefault();
     };
 
@@ -26,19 +27,29 @@ const Text = () => {
 
     const handleButtonClick = (event) => {
         setGlobalId(null);
-        setIsHoveredJsx(false);
+        // setIsHoveredJsx(false);
         event.stopPropagation();
         event.preventDefault();
     };
 
     const textMouseEnter = () => {
+        console.log("enter");
         setIsHoveredJsx(true);
     }
     const textMouseLeave = () => {
+        console.log("leave");
         setIsHoveredJsx(false);
     }
 
     const handleTouchStart = (event) => {
+        console.log("start");
+        setIsHoveredJsx(true);
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    const handleTouchEnd = (event) => {
+        console.log("end");
+        setIsHoveredJsx(false);
         event.stopPropagation();
         event.preventDefault();
     }
@@ -47,18 +58,20 @@ const Text = () => {
     return (
         <main
             className={`text_main ${globalId ? 'visible' : 'hidden'}`}
-            onClick={!isMobile ? handleEvent : undefined}
-            onTouchStart={!isMobile ? undefined : handleTouchStart}
-            // onTouchEnd={!isMobile ? undefined : handleTouchEnd}
-            onMouseEnter={!isMobile ? textMouseEnter : undefined}
-            onMouseLeave={!isMobile ? textMouseLeave : undefined}
+
         >
             <button className='reset'
                 onClick={handleButtonClick}
                 onTouchStart={handleButtonClick}
             >×</button>
 
-            <div className={`text ${globalId ? 'visible' : 'hidden'}`}>
+            <div
+                onClick={!isMobile ? handleEvent : undefined}
+                onTouchStart={!isMobile ? undefined : handleTouchStart}
+                onTouchEnd={!isMobile ? undefined : handleTouchEnd}
+                onMouseEnter={textMouseEnter}
+                onMouseLeave={textMouseLeave}
+                className={`text ${globalId ? 'visible' : 'hidden'}`}>
                 <div className={`text_container 
             ${globalId === 'a' ? 'true' : 'false'} 
             ${globalId ? 'Show' : 'hidden'}`}>

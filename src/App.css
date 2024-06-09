@@ -193,7 +193,7 @@ section {
     .text {
         height: 100%;
         width: 100%;
-        min-width: 400px;
+        min-width: 380px;
         margin: 0px;
         position: absolute;
         right: 0%;
@@ -224,7 +224,7 @@ section {
     .text_main {
         height: 100%;
         width: 25%;
-        min-width: 400px;
+        min-width: 380px;
         margin: 0px;
         position: absolute;
         right: 0%;
