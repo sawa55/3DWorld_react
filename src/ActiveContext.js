@@ -33,7 +33,7 @@ export const ActiveProvider = ({ children }) => {
 
             const handleTouchMove = () => {
                 touchCount.current += 1;
-                if (touchCount.current >= 6) {
+                if (touchCount.current >= 2) {
                     setIsActive(false);
                 }
             };

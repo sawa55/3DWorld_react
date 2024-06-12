@@ -14,7 +14,7 @@ const Text = () => {
 
     const handleEvent = (event) => {
         event.stopPropagation();
-        event.preventDefault();
+        // event.preventDefault();
     };
 
     const handleSwitchId = () => {
@@ -29,7 +29,7 @@ const Text = () => {
         setGlobalId(null);
         // setIsHoveredJsx(false);
         event.stopPropagation();
-        event.preventDefault();
+        // event.preventDefault();
     };
 
     const textMouseEnter = () => {
@@ -45,13 +45,13 @@ const Text = () => {
         console.log("start");
         setIsHoveredJsx(true);
         event.stopPropagation();
-        event.preventDefault();
+        // event.preventDefault();
     }
     const handleTouchEnd = (event) => {
         console.log("end");
         setIsHoveredJsx(false);
         event.stopPropagation();
-        event.preventDefault();
+        // event.preventDefault();
     }
 
 
@@ -62,15 +62,18 @@ const Text = () => {
         >
             <button className='reset'
                 onClick={handleButtonClick}
-                onTouchStart={handleButtonClick}
+                onTouchStart={!isMobile ? undefined : handleTouchStart}
+                onTouchEnd={!isMobile ? undefined : handleTouchEnd}
+                onMouseEnter={!isMobile ? textMouseEnter : undefined}
+                onMouseLeave={!isMobile ? textMouseLeave : undefined}
             >×</button>
 
             <div
                 onClick={!isMobile ? handleEvent : undefined}
                 onTouchStart={!isMobile ? undefined : handleTouchStart}
                 onTouchEnd={!isMobile ? undefined : handleTouchEnd}
-                onMouseEnter={textMouseEnter}
-                onMouseLeave={textMouseLeave}
+                onMouseEnter={!isMobile ? textMouseEnter : undefined}
+                onMouseLeave={!isMobile ? textMouseLeave : undefined}
                 className={`text ${globalId ? 'visible' : 'hidden'}`}>
                 <div className={`text_container 
             ${globalId === 'a' ? 'true' : 'false'} 

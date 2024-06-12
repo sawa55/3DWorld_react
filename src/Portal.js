@@ -202,20 +202,20 @@ const PortalMaterialImpl = ({ position, model, id }) => {
           onPointerUp={!isMobile ? undefined : portalTouchEnd}
 
           onClick={
-            // !isMobile ? 
+            // !isMobile ?
             doubleClickHandler
-            //  : undefined
+            // : undefined
           }
 
           onPointerOver={
-            // !isMobile ? 
+            // !isMobile ?
             handlePointerOver
-            //  : undefined
+            // : undefined
           }
           onPointerOut={
-            // !isMobile ? 
+            // !isMobile ?
             handlePointerOut
-            //  : undefined
+            // : undefined
           }
         >
 

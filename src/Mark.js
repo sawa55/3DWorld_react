@@ -76,7 +76,8 @@ function HighlightMarker({ gltf }) {
                 // オブジェクトとの交差点を計算
                 const intersects = raycaster.intersectObjects(gltf.scene.children, true);
                 const boxIntersect = intersects.find(intersect => intersect.object.name === "Floor");
-                console.log(isHoveredJsx);
+                console.log("isHoveredJsx", isHoveredJsx);
+
                 if (boxIntersect && !isHoveredJsx) {
                     const position = boxIntersect.point.clone();
                     position.y += 0.01; // 少し浮かせる
